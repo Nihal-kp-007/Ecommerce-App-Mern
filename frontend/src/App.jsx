@@ -6,6 +6,7 @@ import HomePage from "./screens/HomePage";
 import { Container } from "react-bootstrap";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ProductScreen from "./screens/ProductScreen";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Container>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/productinfo/:id" element={<ProductScreen />} />
           </Routes>
         </Container>
       </main>
