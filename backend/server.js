@@ -3,12 +3,14 @@ import connectDb from "./config/db.js";
 import productRoutes from "./Routes/productRoutes.js"
 import userRoutes from "./Routes/userRoutes.js"
 import { errorHandler, notFound } from "./middlewares/errorHandler.js";
+import cookieParser from "cookie-parser";
 
 
 connectDb();
 const app = express();
 
 app.use(express.json()); //middleware
+app.use(cookieParser()); //middleware
 
 const port = 5000;
 

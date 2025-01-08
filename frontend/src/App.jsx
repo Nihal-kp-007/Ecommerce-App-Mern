@@ -7,16 +7,22 @@ import { Container } from "react-bootstrap";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ProductScreen from "./screens/ProductScreen";
+import CartScreen from "./screens/CartScreen";
+import LoginScreen from "./screens/LoginScreen";
+import SignUpScreen from "./screens/SignUpScreen";
 
 const App = () => {
   return (
     <>
-      <Header />
+
       <main className="py-3">
         <Container>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/homepage" element={<HomePage />} />
             <Route path="/productinfo/:id" element={<ProductScreen />} />
+            <Route path="/cart" element={<CartScreen />} />
+            <Route path="/" element={<LoginScreen />} />
+            <Route path="/register" element={<SignUpScreen />} />
           </Routes>
         </Container>
       </main>
