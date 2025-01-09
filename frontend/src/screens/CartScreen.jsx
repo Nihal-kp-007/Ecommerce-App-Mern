@@ -1,13 +1,22 @@
-import { Button, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Image,
+  ListGroup,
+  Row,
+} from "react-bootstrap";
 import Message from "../components/Message";
 import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart } from "../slices/cartSlice";
+import { useState } from "react";
 
 const CartScreen = () => {
-    const { cartItems } = useSelector((state) => state.cart);
-    const dispatch = useDispatch()
+  const [qty, setQty] = useState(1);
+  const { cartItems } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   return (
     <Row>
       <Col md={8}>
@@ -28,9 +37,26 @@ const CartScreen = () => {
                     <Link to={`/productinfo/${item._id}`}>{item.name}</Link>
                   </Col>
                   <Col md={2}>${item.price}</Col>
-
+                  <Col
+                    md={1}
+                    as="select"
+                    value={qty}
+                    onChange={(e) => setQty(e.target.value)}
+                  >
+                    {[...Array(item.countInStock).keys()].map((x) => {
+                      return (
+                        <option key={x + 1} value={x + 1}>
+                          {x + 1}
+                        </option>
+                      );
+                    })}
+                  </Col>
                   <Col md={2}>
-                    <Button type="button" variant="light" onClick={()=>dispatch(removeFromCart(item))}>
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => dispatch(removeFromCart(item))}
+                    >
                       <FaTrash />
                     </Button>
                   </Col>
@@ -45,7 +71,8 @@ const CartScreen = () => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + Number(item.qty), 0)})
+                Subtotal (
+                {cartItems.reduce((acc, item) => acc + Number(item.qty), 0)})
                 items
               </h2>
               $

@@ -4,12 +4,12 @@ import "./assets/styles/bootstrap.custom.css";
 import "./assets/styles/index.css";
 import HomePage from "./screens/HomePage";
 import { Container } from "react-bootstrap";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ProductScreen from "./screens/ProductScreen";
 import CartScreen from "./screens/CartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignUpScreen from "./screens/SignUpScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 
 const App = () => {
   return (
@@ -23,6 +23,7 @@ const App = () => {
             <Route path="/cart" element={<CartScreen />} />
             <Route path="/" element={<LoginScreen />} />
             <Route path="/register" element={<SignUpScreen />} />
+            <Route path="/profile" element={<ProfileScreen />} />
           </Routes>
         </Container>
       </main>

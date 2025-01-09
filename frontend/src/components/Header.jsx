@@ -1,5 +1,11 @@
-import { Badge, Button, Container, Nav, Navbar } from "react-bootstrap";
-import { FaShoppingCart, FaUser } from "react-icons/fa";
+import {
+  Badge,
+  Container,
+  Nav,
+  Navbar,
+  NavDropdown,
+} from "react-bootstrap";
+import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogoutUserMutation } from "../slices/userApiSlice";
@@ -36,15 +42,15 @@ const Header = () => {
                   {cartItems.reduce((acc, item) => acc + Number(item.qty), 0)}
                 </Badge>
               </Nav.Link>
-              {!userInfo?<Nav.Link as={Link} to="/">
-                <FaUser /> Sign In
-              </Nav.Link>
-              :<Button onClick={logoutHandler}>
-                logout
-              </Button>}
-              <Nav.Link as={Link} to="/homepage">
-              {userInfo&& userInfo.name}
-              </Nav.Link>
+              <NavDropdown title={userInfo?.name} id="username">
+                <Nav.Link as={Link} to="/profile">
+                  <NavDropdown.Item>Profile</NavDropdown.Item>
+                </Nav.Link>
+                <NavDropdown.Item onClick={logoutHandler}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+              
             </Nav>
           </Navbar.Collapse>
         </Container>

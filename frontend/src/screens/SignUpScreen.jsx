@@ -1,85 +1,98 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterUserMutation } from "../slices/userApiSlice";
 import { toast } from "react-toastify";
+import FormContainer from "../components/FormContainer";
+import Loader from "../components/Loader";
+import { Col, Row } from "react-bootstrap";
 
 const SignUpScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [registerUser] = useRegisterUserMutation();
-  const handleSubmit = async (e) => {
+  const [registerUser,{isLoading}] = useRegisterUserMutation();
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("first");
+    console.log({ name, email, password, confirmPassword });
     try {
-      await registerUser({ name, email, password }).unwrap();
-      setName("");
-      setEmail("");
-      setPassword("");
-    toast.success("successfully registered");
-      navigate("/");
+      if (password === confirmPassword) {
+        await registerUser({ name, email, password }).unwrap();
+        setName("");
+        setEmail("");
+        setPassword("");
+        toast.success("successfully registered");
+        navigate("/");
+      }else{
+        toast.error("passwords do not match");
+      }
     } catch (error) {
-    toast.error(error.data.message);
+      toast.error(error.data.message);
     }
-  };    
+  };
 
   return (
-    <div
-      style={{
-        boxShadow: "2px 2px 5px 2px",
-        padding: "10px",
-        borderRadius: "15px",
-      }}
-    >
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+    <FormContainer>
+      <h1>Register</h1>
+      <Form onSubmit={submitHandler}>
+        <Form.Group className="my-2" controlId="name">
           <Form.Label>Name</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="Enter Name"
+            type="name"
+            placeholder="Enter name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-          />
+          ></Form.Control>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
+
+        <Form.Group className="my-2" controlId="email">
+          <Form.Label>Email Address</Form.Label>
           <Form.Control
             type="email"
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-          />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
+          ></Form.Control>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Group className="my-2" controlId="password">
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
-            placeholder="Password"
+            placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          />
+          ></Form.Control>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
+        <Form.Group className="my-2" controlId="confirmPassword">
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          ></Form.Control>
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
+
+        <Button disabled={isLoading} type="submit" variant="primary">
+          Register
         </Button>
+
+        {isLoading && <Loader />}
       </Form>
-      <p className="mt-6 text-sm text-center text-gray-600">
-        Don't have an account?{" "}
-        <Link to="/" className="text-teal-500 hover:underline">
-          Login
-        </Link>
-      </p>
-    </div>
+
+      <Row className="py-3">
+        <Col>
+          Already have an account? <Link to={"/"}>Login</Link>
+        </Col>
+      </Row>
+    </FormContainer>
   );
 };
 

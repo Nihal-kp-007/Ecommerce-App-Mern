@@ -4,7 +4,9 @@ import productRoutes from "./Routes/productRoutes.js"
 import userRoutes from "./Routes/userRoutes.js"
 import { errorHandler, notFound } from "./middlewares/errorHandler.js";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
+dotenv.config();
 
 connectDb();
 const app = express();
@@ -12,7 +14,7 @@ const app = express();
 app.use(express.json()); //middleware
 app.use(cookieParser()); //middleware
 
-const port = 5000;
+const port = process.env.PORT;
 
 app.get("/", (req, res) => {
   res.send("Ecommerce App");

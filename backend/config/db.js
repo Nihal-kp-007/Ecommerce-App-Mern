@@ -2,9 +2,7 @@ import mongoose from "mongoose";
 
 const connectDb = async () => {
   try {
-    const conn = await mongoose.connect(
-      "mongodb+srv://nihalkp503:nihalkp503@cluster0.8fsz4.mongodb.net/data"
-    );
+    const conn = await mongoose.connect(process.env.MONGO_URL);
     console.log(`MongoDb connected : ${conn.connection.host}`);
   } catch (error) {
     console.error(error.message);
@@ -13,4 +11,3 @@ const connectDb = async () => {
 };
 
 export default connectDb;
- 

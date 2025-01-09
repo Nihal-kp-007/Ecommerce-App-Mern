@@ -1,12 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import updateCart from "../utils/cartutils";
 
 const initialState = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart"))
   : { cartItems: [] };
-
-const addDecimal = (num) => {
-  return num.toFixed(2);
-};
 
 const cartSlice = createSlice({
   name: "cart",
@@ -24,39 +21,17 @@ const cartSlice = createSlice({
       } else {
         state.cartItems = [...state.cartItems, item];
       }
-      state.itemsPrice = addDecimal(
-        state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-      );
-
-      state.shippingPrice = addDecimal(state.itemsPrice > 100 ? 0 : 10);
-
-      state.taxPrice = addDecimal(0.15 * state.itemsPrice);
-
-      state.totalPrice =
-        Number(state.itemsPrice) +
-        Number(state.shippingPrice) +
-        Number(state.taxPrice);
-
-      localStorage.setItem("cart", JSON.stringify(state));
+      return updateCart(state);
     },
     removeFromCart: (state, action) => {
       const item = action.payload;
       state.cartItems = state.cartItems.filter((x) => x._id !== item._id);
-      state.itemsPrice = addDecimal(
-        state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-      );
-      state.shippingPrice = addDecimal(0);
-      state.taxPrice = addDecimal(0.15 * state.itemsPrice);
-
-      state.totalPrice =
-        Number(state.itemsPrice) +
-        Number(state.shippingPrice) +
-        Number(state.taxPrice);
-      if (state.cartItems.length == 0) {
-        localStorage.removeItem("cart");
-      } else {
-        localStorage.setItem("cart", JSON.stringify(state));
-      }
+      return updateCart(state);
+      // if (state.cartItems.length == 0) {
+      //   localStorage.removeItem("cart");
+      // } else {
+      //   localStorage.setItem("cart", JSON.stringify(state));
+      // }
     },
   },
 });
