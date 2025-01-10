@@ -10,20 +10,28 @@ import CartScreen from "./screens/CartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import Header from "./components/Header";
+import ShippingScreen from "./screens/ShippingScreen";
+import PaymentScreen from "./screens/PaymentScreen";
+import PrivateRoutes from "./components/PrivateRoutes";
 
 const App = () => {
   return (
     <>
+      <Header />
 
       <main className="py-3">
         <Container>
           <Routes>
-            <Route path="/homepage" element={<HomePage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/register" element={<SignUpScreen />} />
             <Route path="/productinfo/:id" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
-            <Route path="/" element={<LoginScreen />} />
-            <Route path="/register" element={<SignUpScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="" element={<PrivateRoutes />}></Route>
+            <Route path="/shipping" element={<ShippingScreen />} />
+            <Route path="/payment" element={<PaymentScreen />} />
           </Routes>
         </Container>
       </main>

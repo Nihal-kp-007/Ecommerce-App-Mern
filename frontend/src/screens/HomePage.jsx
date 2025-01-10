@@ -2,13 +2,12 @@ import { Col, Row } from "react-bootstrap";
 import Product from "../components/Product";
 import { useGetProductsQuery } from "../slices/productsApiSlice.js";
 import Loader from "../components/Loader.jsx";
-import Header from "../components/Header.jsx";
 
 const HomePage = () => {
   const { data: products, isLoading, error } = useGetProductsQuery();
   return (
     <>
-      <Header />
+   
       {isLoading ? (
         <Loader />
       ) : error ? (
