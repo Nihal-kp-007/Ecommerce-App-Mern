@@ -34,7 +34,7 @@ const ProductScreen = () => {
         <Message variant="danger">{error.data.message || error.error}</Message>
       ) : (
         <>
-          <Link to="/homepage" className="btn btn-light my-3">
+          <Link to="/" className="btn btn-light my-3">
             Go Back
           </Link>
           <Row>
