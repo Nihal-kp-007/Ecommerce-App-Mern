@@ -22,13 +22,11 @@ const SignUpScreen = () => {
   const [registerUser,{isLoading}] = useRegisterUserMutation();
 
   const { search } = useLocation();
-  console.log(search);
   const sp = new URLSearchParams(search);
   const redirect = sp.get("redirect") || "/";
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log({ name, email, password, confirmPassword });
    if (password !== confirmPassword) {
       toast.error("Passwords do not match");
     } else {

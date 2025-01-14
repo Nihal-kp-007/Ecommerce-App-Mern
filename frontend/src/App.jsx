@@ -30,12 +30,12 @@ const App = () => {
             <Route path="/register" element={<SignUpScreen />} />
             <Route path="/productinfo/:id" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
-            <Route path="/profile" element={<ProfileScreen />} />
             <Route path="" element={<PrivateRoutes />}>
               <Route path="/shipping" element={<ShippingScreen />} />
               <Route path="/payment" element={<PaymentScreen />} />
               <Route path="/placeorder" element={<PlaceOrderScreen />} />
               <Route path="/order/:id" element={<OrderScreen />} />
+              <Route path="/profile" element={<ProfileScreen />} />
             </Route>
           </Routes>
         </Container>
