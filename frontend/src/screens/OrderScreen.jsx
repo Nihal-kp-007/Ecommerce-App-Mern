@@ -32,11 +32,11 @@ const OrderScreen = () => {
                 {order.shipping.postalCode},{order.shipping.country}
               </p>
               {order.isDelivered ? (
-                <Message varient="success">
+                <Message variant="success">
                   Delivered on {order.deliveredAt}
                 </Message>
               ) : (
-                <Message varient="danger">Not Delivered</Message>
+                <Message variant="danger">Not Delivered</Message>
               )}
             </ListGroup.Item>
             <ListGroup.Item>
@@ -46,9 +46,9 @@ const OrderScreen = () => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message varient="success">Paid on {order.paidAt}</Message>
+                <Message variant="success">Paid on {order.paidAt}</Message>
               ) : (
-                <Message varient="danger">Not Paid</Message>
+                <Message variant="danger">Not Paid</Message>
               )}
             </ListGroup.Item>
             <ListGroup.Item>

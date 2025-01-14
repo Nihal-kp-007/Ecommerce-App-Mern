@@ -27,6 +27,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      isAdmin: user.isAdmin,
     });
   } else {
     res.status(400);
@@ -42,6 +43,7 @@ const authUser = asyncHandler(async (req, res, next) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      isAdmin: user.isAdmin,
     });
   } else {
     res.status(400);
@@ -69,9 +71,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
     const updateUser = await user.save();
     res.status(200).json({
-      _id: user._id,
       name: user.name,
       email: user.email,
+      password: user.password,
     });
   } else {
     res.status(404);
