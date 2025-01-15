@@ -4,20 +4,29 @@ import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import {
   useCreateProductMutation,
+  useDeleteProductMutation,
   useGetProductsQuery,
 } from "../../slices/productsApiSlice";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ProductListScreen = () => {
   const { data: products, isLoading, error } = useGetProductsQuery();
   const [createProduct] = useCreateProductMutation();
-  const navigate = useNavigate();
+  const [deleteProduct] = useDeleteProductMutation();
 
   const createProductHandler = async () => {
     try {
       await createProduct();
       toast.success("Product created successfully");
+    } catch (err) {
+      toast.error(err?.data?.message);
+    }
+  };
+  const deleteHandler = async (id) => {
+    try {
+      await deleteProduct(id).unwrap();
+      toast.success("Product deleted successfully");
     } catch (err) {
       toast.error(err?.data?.message);
     }
@@ -60,14 +69,11 @@ const ProductListScreen = () => {
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
                   <td>
-                   <Link to={`/admin/product/${product._id}`}>
-                   <Button
-                      variant="light"
-                      className="btn-sm mx-2"
-                    >
-                      <FaEdit />
-                    </Button>
-                   </Link>
+                    <Link to={`/admin/product/${product._id}`}>
+                      <Button variant="light" className="btn-sm mx-2">
+                        <FaEdit />
+                      </Button>
+                    </Link>
 
                     <Button
                       variant="danger"

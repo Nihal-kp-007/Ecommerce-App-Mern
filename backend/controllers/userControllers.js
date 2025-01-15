@@ -81,4 +81,43 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, authUser, logout, updateUserProfile };
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find();
+  res.json(users);
+});
+const getUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.json(user);
+});
+
+const updateUser = asyncHandler(async (req, res) => {
+  const { name, email, isAdmin } = req.body;
+  const user = await User.findById(req.params.id);
+  if (user) {
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.isAdmin = isAdmin || user.isAdmin;
+
+    const updateUser = await user.save();
+    res.json(updateUser);
+  } else {
+    res.status(404);
+    throw new Error("User Not Found");
+  }
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  res.json(user);
+});
+
+export {
+  registerUser,
+  authUser,
+  logout,
+  updateUserProfile,
+  getAllUsers,
+  updateUser,
+  getUser,
+  deleteUser,
+};

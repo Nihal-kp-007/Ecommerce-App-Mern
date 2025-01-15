@@ -7,7 +7,7 @@ const initialState = localStorage.getItem("cart")
       cartItems: [],
       shipping: {},
       paymentMethod: "",
-      paymentResult: { id: "" },
+      paymentResult: {},
     };
 
 const cartSlice = createSlice({
