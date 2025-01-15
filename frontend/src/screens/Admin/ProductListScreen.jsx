@@ -2,10 +2,26 @@ import { Button, Col, Row, Table } from "react-bootstrap";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
-import { useGetProductsQuery } from "../../slices/productsApiSlice";
+import {
+  useCreateProductMutation,
+  useGetProductsQuery,
+} from "../../slices/productsApiSlice";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductListScreen = () => {
-    const {data:products, isLoading,error} = useGetProductsQuery()
+  const { data: products, isLoading, error } = useGetProductsQuery();
+  const [createProduct] = useCreateProductMutation();
+  const navigate = useNavigate();
+
+  const createProductHandler = async () => {
+    try {
+      await createProduct();
+      toast.success("Product created successfully");
+    } catch (err) {
+      toast.error(err?.data?.message);
+    }
+  };
   return (
     <>
       <Row className="align-items-center">
@@ -13,7 +29,7 @@ const ProductListScreen = () => {
           <h1>Products</h1>
         </Col>
         <Col className="text-end">
-          <Button className="btn-sm m-3">
+          <Button className="btn-sm m-3" onClick={createProductHandler}>
             <FaPlus /> Create Product
           </Button>
         </Col>
@@ -44,9 +60,14 @@ const ProductListScreen = () => {
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
                   <td>
-                    <Button variant="light" className="btn-sm mx-2">
+                   <Link to={`/admin/product/${product._id}`}>
+                   <Button
+                      variant="light"
+                      className="btn-sm mx-2"
+                    >
                       <FaEdit />
                     </Button>
+                   </Link>
 
                     <Button
                       variant="danger"

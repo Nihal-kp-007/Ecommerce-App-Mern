@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { savePaymentMethod } from "../slices/cartSlice";
 
 const PaymentScreen = () => {
-  const [paymentMethod, setPaymentMethod] = useState("Paypal");
+  const [paymentMethod, setPaymentMethod] = useState("Razor Pay");
   const {shipping} = useSelector((state) => state.cart)
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -32,10 +32,10 @@ const PaymentScreen = () => {
             <Form.Check
               className="my-2"
               type="radio"
-              label="PayPal or Credit Card"
-              id="PayPal"
+              label="RazorPay"
+              id="Pay"
               name="paymentMethod"
-              value="PayPal"
+              value="RazorPay"
               checked
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>

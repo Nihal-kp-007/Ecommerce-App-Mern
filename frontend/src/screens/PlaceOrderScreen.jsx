@@ -4,33 +4,59 @@ import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { useDispatch, useSelector } from "react-redux";
-import { useCreateOrderMutation } from "../slices/orderApiSlice";
+import {
+  useCreateOrderMutation,
+  useGetOrderByIdQuery,
+} from "../slices/orderApiSlice";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-import { clearCartItems } from "../slices/cartSlice";
+import { clearCartItems, savePaymentResult } from "../slices/cartSlice";
 
 const PlaceOrderScreen = () => {
   const cart = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.auth);
   const [createOrder, { error, isLoading }] = useCreateOrderMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const placeOrderHandler = async () => {
-    try {
-      const res = await createOrder({
-        cartItems: cart.cartItems,
-        shipping: cart.shipping,
-        paymentMethod: cart.paymentMethod,
-        itemsPrice: cart.itemsPrice,
-        taxPrice: cart.taxPrice,
-        shippingPrice: cart.shippingPrice,
-        totalPrice: cart.totalPrice,
-      }).unwrap();
-      dispatch(clearCartItems())
-      navigate(`/order/${res._id}`);
-    } catch (error) {
-      toast.error(error.message);
-    }
+    const options = {
+      key: "rzp_test_UJJJsR3J5cVNMy",
+      key_secret: "4m7XXXOToBsFMRiDhN71PMop",
+      amount: parseInt(cart.totalPrice * 100),
+      currency: "INR",
+      order_receipt: "order_rcptid_" + userInfo.name,
+      name: "Ecommerce",
+      description: "for testing purpose",
+      handler: async function (response) {
+        console.log(response);
+        toast.success("Payment Successful");
+        const paymentId = response.razorpay_payment_id;
+        dispatch(savePaymentResult({ id: paymentId }));
+        try {
+          const res = await createOrder({
+            cartItems: cart.cartItems,
+            shipping: cart.shipping,
+            paymentMethod: cart.paymentMethod,
+            paymentResult: cart.paymentResult,
+            itemsPrice: cart.itemsPrice,
+            taxPrice: cart.taxPrice,
+            shippingPrice: cart.shippingPrice,
+            totalPrice: cart.totalPrice,
+          }).unwrap();
+          dispatch(clearCartItems());
+          navigate(`/order/${res._id}`);
+        } catch (error) {
+          toast.error(error.message);
+        }
+      },
+
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    const pay = new window.Razorpay(options);
+    pay.open();
   };
 
   useEffect(() => {
@@ -51,8 +77,7 @@ const PlaceOrderScreen = () => {
               <p>
                 <strong>Address:</strong>
                 {cart.shipping.address}, {cart.shipping.city}{" "}
-                {cart.shipping.postalCode},{" "}
-                {cart.shipping.country}
+                {cart.shipping.postalCode}, {cart.shipping.country}
               </p>
             </ListGroup.Item>
             <ListGroup.Item>
