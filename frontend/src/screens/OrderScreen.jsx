@@ -1,12 +1,29 @@
-import { Card, Col, Image, ListGroup, Row } from "react-bootstrap";
+import { Button, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { Link, useParams } from "react-router-dom";
-import { useGetOrderByIdQuery } from "../slices/orderApiSlice";
+import {
+  useGetOrderByIdQuery,
+  useOrderToDeliveryMutation,
+} from "../slices/orderApiSlice";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const OrderScreen = () => {
   const { id } = useParams();
-  const { data: order, isLoading, error } = useGetOrderByIdQuery(id);
+  const { data: order, isLoading, error, refetch } = useGetOrderByIdQuery(id);
+  const { userInfo } = useSelector((state) => state.auth);
+  const [updateDelivery] = useOrderToDeliveryMutation();
+
+  const deliverHandler = async () => {
+    try {
+      await updateDelivery(id).unwrap();
+      refetch()
+      toast.success("Order delivered successfully");
+    } catch (error) {
+      toast.error(error?.data?.message);
+    }
+  };
   return isLoading ? (
     <Loader />
   ) : error ? (
@@ -62,7 +79,7 @@ const OrderScreen = () => {
                       <Row>
                         <Col md={1}>
                           <Image
-                            src={item.image}
+                            src={`http://localhost:5000${item.image}`}
                             alt={item.name}
                             fluid
                             rounded
@@ -114,8 +131,9 @@ const OrderScreen = () => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {/* PAY ORDER PLACEHOLDER */}
-              {/* {MARK AS DELIVERED PLACEHOLDER} */}
+              {userInfo.isAdmin && (
+                <Button onClick={deliverHandler}>Delivered</Button>
+              )}
             </ListGroup>
           </Card>
         </Col>

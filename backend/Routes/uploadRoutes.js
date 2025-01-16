@@ -2,7 +2,7 @@ import path from "path";
 import multer from "multer";
 import express from "express";
 
-const router = express.Router();
+const   router = express.Router();
 
 const storage = multer.diskStorage({
   destination(req, flie, cb) {

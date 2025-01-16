@@ -72,6 +72,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
   res.json(product);
 });
 
+
+
 export {
   getProducts,
   createProducts,

@@ -6,7 +6,9 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useCreateOrderMutation,
+  useGetKeyQuery,
   useGetOrderByIdQuery,
+  useOrderToPaidMutation,
 } from "../slices/orderApiSlice";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
@@ -16,6 +18,9 @@ const PlaceOrderScreen = () => {
   const cart = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
   const [createOrder, { error, isLoading }] = useCreateOrderMutation();
+  const [orderToPaid] = useOrderToPaidMutation()
+  const {data} = useGetKeyQuery()
+  console.log(data)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -45,6 +50,7 @@ const PlaceOrderScreen = () => {
             totalPrice: cart.totalPrice,
           }).unwrap();
           dispatch(clearCartItems());
+          await orderToPaid(res._id)
           navigate(`/order/${res._id}`);
         } catch (error) {
           toast.error(error.message);

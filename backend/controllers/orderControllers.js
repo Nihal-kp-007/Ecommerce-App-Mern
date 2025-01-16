@@ -64,14 +64,40 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @route PUT /api/orders/:id
 // @access Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  res.send("updateOrderToPaid ");
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    const updateOrder = await order.save();
+    res.json(updateOrder);
+  } else {
+    res.status(404);
+    throw new Error("Payment Not Complete");
+  }
 });
+
+const getKey = asyncHandler(async (req, res) => {
+  const key =  process.env.RAZOR_PAY_KEY;
+  console.log(key)
+  res.status(200).json(key);
+});
+
 // @desc update order to delivered
 // @route PUT /api/orders/:id/deliver
 // @access Private/admin
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
-  res.send("updateOrderToDelivered ");
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+    const updateOrder = await order.save();
+    res.json(updateOrder);
+  } else {
+    res.status(404);
+    throw new Error("Delivery Not Complete");
+  }
 });
+
 // @desc get all orders
 // @route GET /api/orders
 // @access Private/admin
@@ -87,4 +113,5 @@ export {
   updateOrderToDelivered,
   getMyOrder,
   getOrders,
+  getKey,
 };
